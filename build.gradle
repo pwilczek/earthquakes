@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+}
+
+group 'name.wilu.sr.earthquakes'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = '11'
+
+repositories {
+    maven { url 'https://download.osgeo.org/webdav/geotools/' }
+    maven { url 'https://repo.boundlessgeo.com/main/' }
+    maven { url 'https://repo1.maven.org/maven2/' }
+    mavenCentral()
+}
+test { useJUnitPlatform() }
+
+jar {
+    manifest {
+        attributes('Main-Class': 'name.wilu.earthquakes.NearbyEarthquakesApp')
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    compile 'org.geotools:gt-geometry:22.2'
+    compile 'io.github.openfeign:feign-core:10.9'
+    compile 'io.github.openfeign:feign-gson:10.9'
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    //
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+    //
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.3.3'
+    testCompile 'org.junit.jupiter:junit-jupiter-params:5.6.1'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+    testCompileOnly 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+}
